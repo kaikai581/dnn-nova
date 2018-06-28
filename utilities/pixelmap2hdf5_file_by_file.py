@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # $ setup_nova -b maxopt -r R17-11-14-prod4reco.neutron-respin.b
+###############################################################################
+# NEVER FORGET TO SETUP THE TEST RELEASE!!!!
+###############################################################################
+# $ cd /nova/ana/users/slin/test_releases/wrong_sign_cnn_R17-11-14-prod4reco.neutron-respin.b
+# $ srt_setup -a
 
 from __future__ import print_function
 
