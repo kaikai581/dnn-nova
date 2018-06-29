@@ -31,6 +31,10 @@ class PixelMapDataset(Dataset):
             self.hdf5_len_list.append(f['data'].shape[0])
         
         self.totnevt = sum(self.hdf5_len_list)
+
+        # sanity check variables
+        self.fidx = 0
+        self.idx_in_file = 0
     
     def __len__(self):
         return self.totnevt
@@ -46,6 +50,10 @@ class PixelMapDataset(Dataset):
             else:
                 fidx = i
                 break
+        
+        # assign values to sanity check variables
+        self.fidx = fidx
+        self.idx_in_file = idx
 
         hdf5_file = self.hdf5_files[fidx]
         pixelmap = hdf5_file['data'][idx][:2,]
@@ -58,16 +66,11 @@ class PixelMapDataset(Dataset):
         # signel (numubar cc): 0
         # background1 (numu cc): 1
         # background2 (all others): 2
-        label = -1
-        if not iscc:
-            label = 2
-        else:
-            if isnumubar:
-                label = 0
-            elif isnumu:
-                label = 1
-            else:
-                label = 2
+        label = 2
+        if iscc and isnumubar:
+            label = 0
+        if iscc and isnumu:
+            label = 1
 
         sample = {'pixelmap': pixelmap, 'label': label}
         return sample
@@ -78,6 +81,6 @@ ds = PixelMapDataset()
 #print(torch.cuda.get_device_name(0))
 
 idx = random.randint(0, ds.totnevt - 1)
-print(idx, ds.__getitem__(idx)['pixelmap'].shape, ds.__getitem__(idx)['label'])
+print( idx, ds.__getitem__(idx)['pixelmap'].shape, 'label: {} pdg: {}'.format(ds.__getitem__(idx)['label'], ds.hdf5_files[ds.fidx]['pdg'][ds.idx_in_file]) )
 plt.imshow(ds.__getitem__(idx)['pixelmap'][0], origin='lower')
 plt.show()
