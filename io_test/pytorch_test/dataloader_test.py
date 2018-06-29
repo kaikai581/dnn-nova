@@ -52,10 +52,10 @@ class PixelMapDataset(Dataset):
 
         # determine label
         iscc = hdf5_file['interaction_mode'][idx] <= 3
-        isfhc = hdf5_file['pdg'][idx] > 0
+        isparticle = hdf5_file['pdg'][idx] > 0
 
         label = 0
-        if iscc and isfhc:
+        if iscc and isparticle:
             label = 1
         if not iscc:
             label = 2
@@ -70,5 +70,5 @@ ds = PixelMapDataset()
 
 idx = random.randint(0, ds.totnevt - 1)
 print(idx, ds.__getitem__(idx)['pixelmap'].shape, ds.__getitem__(idx)['label'])
-plt.imshow(ds.__getitem__(idx)['pixelmap'][0])
+plt.imshow(ds.__getitem__(idx)['pixelmap'][0], origin='lower')
 plt.show()
