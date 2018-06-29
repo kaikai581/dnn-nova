@@ -16,8 +16,10 @@ hdf5_file = h5py.File(hdf5_pathname, "r")
 # print shape for each stored data
 for key in hdf5_file.keys(): print(key, hdf5_file[key].shape, type(hdf5_file[key][0]))
 
-# show the first image
-plt.imshow(hdf5_file['data'][random.randint(0,hdf5_file['data'].shape[0]-1)][random.randint(0, 3)])
+# show some random image
+idx = random.randint(0,hdf5_file['data'].shape[0]-1)
+print('pdg: {}'.format(hdf5_file['pdg'][idx]))
+plt.imshow(hdf5_file['data'][idx][random.randint(0, 3)], origin='lower')
 plt.show()
 
 hdf5_file.close()

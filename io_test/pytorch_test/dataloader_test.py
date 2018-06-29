@@ -52,13 +52,22 @@ class PixelMapDataset(Dataset):
 
         # determine label
         iscc = hdf5_file['interaction_mode'][idx] <= 3
-        isparticle = hdf5_file['pdg'][idx] > 0
+        isnumu = (hdf5_file['pdg'][idx] == 14)
+        isnumubar = (hdf5_file['pdg'][idx] == -14)
 
-        label = 0
-        if iscc and isparticle:
-            label = 1
+        # signel (numubar cc): 0
+        # background1 (numu cc): 1
+        # background2 (all others): 2
+        label = -1
         if not iscc:
             label = 2
+        else:
+            if isnumubar:
+                label = 0
+            elif isnumu:
+                label = 1
+            else:
+                label = 2
 
         sample = {'pixelmap': pixelmap, 'label': label}
         return sample
