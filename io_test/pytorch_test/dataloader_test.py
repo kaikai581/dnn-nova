@@ -20,13 +20,15 @@ class PixelMapDataset(Dataset):
         """
 
         with open(hdf5_file_list, 'r') as f:
-            self.hdf5_file_list = f.readlines()
+            self.hdf5_file_list = f.read().splitlines()
         
-        self.hdf5_len_list = []
+        self.hdf5_files = []
         for fn in self.hdf5_file_list:
-            hdf5_file = h5py.File(fn, "r")
-            self.hdf5_len_list.append(hdf5_file['data'].shape[0])
-            hdf5_file.close()
+            self.hdf5_files.append(h5py.File(fn, 'r'))
+
+        self.hdf5_len_list = []
+        for f in self.hdf5_files:
+            self.hdf5_len_list.append(f['data'].shape[0])
         
         self.totnevt = sum(self.hdf5_len_list)
     
@@ -45,7 +47,7 @@ class PixelMapDataset(Dataset):
                 fidx = i
                 break
 
-        hdf5_file = h5py.File(self.hdf5_file_list[fidx], "r")
+        hdf5_file = self.hdf5_files[fidx]
         pixelmap = hdf5_file['data'][idx][:2,]
 
         # determine label
@@ -59,7 +61,6 @@ class PixelMapDataset(Dataset):
             label = 2
 
         sample = {'pixelmap': pixelmap, 'label': label}
-        hdf5_file.close()
         return sample
 
 ds = PixelMapDataset()
@@ -68,6 +69,6 @@ ds = PixelMapDataset()
 #print(torch.cuda.get_device_name(0))
 
 idx = random.randint(0, ds.totnevt - 1)
-print(ds.__getitem__(idx)['pixelmap'].shape, ds.__getitem__(idx)['label'])
+print(idx, ds.__getitem__(idx)['pixelmap'].shape, ds.__getitem__(idx)['label'])
 plt.imshow(ds.__getitem__(idx)['pixelmap'][0])
 plt.show()
