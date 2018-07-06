@@ -46,4 +46,4 @@ for epoch in range(max_epochs):
             .format(epoch+1, max_epochs, i+1, total_step, loss.item()))
 
 # save the model checkpoint
-torch.save(model.state_dict(), 'model.ckpt')
+torch.save(model.state_dict(), '../../../data/saved_models/alexnet/model.ckpt')
