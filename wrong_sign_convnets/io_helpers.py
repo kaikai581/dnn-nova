@@ -12,11 +12,12 @@ import torch
 class PixelMapDataset(Dataset):
     """Pixel Map dataset."""
 
-    def __init__(self, hdf5_file_list = 'file_list.txt'):
+    def __init__(self, hdf5_file_list = 'file_list.txt', channel = 'both'):
         """
         Args:
             hdf5_file_list (string): A file with a list of the full pathname to individual
                 hdf5 files.
+            channel (string): Value -- 'time', 'charge', 'both', default to both
         """
 
         with open(hdf5_file_list, 'r') as f:
@@ -35,12 +36,15 @@ class PixelMapDataset(Dataset):
         # sanity check variables
         self.fidx = 0
         self.idx_in_file = 0
+
+        # record channel(s) being used
+        self.channel = channel
     
     def __len__(self):
         return self.totnevt
 
     def __getitem__(self, idx):
-        fidx = 0
+        fidx = 0 # file index
         if idx >= self.totnevt:
             fidx = len(self.hdf5_len_list) - 1
             idx = self.hdf5_len_list[fidx] - 1
@@ -56,7 +60,13 @@ class PixelMapDataset(Dataset):
         self.idx_in_file = idx
 
         hdf5_file = self.hdf5_files[fidx]
+        # even channels: charge
+        # odd channels: time
         pixelmap = hdf5_file['data'][idx][:2,]
+        if self.channel == 'time':
+            pixelmap = hdf5_file['data'][idx][:1,]
+        if self.channel == 'charge':
+            pixelmap = hdf5_file['data'][idx][[0],]
 
         # determine label
         iscc = hdf5_file['interaction_mode'][idx] <= 3
