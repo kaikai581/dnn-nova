@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader, Dataset
 
 import h5py
 import matplotlib.pyplot as plt
+import os
 import random
 import torch
 
@@ -20,8 +21,12 @@ class PixelMapDataset(Dataset):
             channel (string): Value -- 'time', 'charge', 'both', default to both
         """
 
+        self.hdf5_file_list = []
+        THIS_FOLDER = os.path.join(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), 'data'), 'wrong_sign_classification')
         with open(hdf5_file_list, 'r') as f:
-            self.hdf5_file_list = f.read().splitlines()
+            fns = f.read().splitlines()
+            for fn in fns:
+                self.hdf5_file_list.append(os.path.join(THIS_FOLDER, fn))
         
         self.hdf5_files = []
         for fn in self.hdf5_file_list:
