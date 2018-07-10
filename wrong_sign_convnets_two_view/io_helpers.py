@@ -22,7 +22,10 @@ class PixelMapDataset(Dataset):
         """
 
         self.hdf5_file_list = []
-        THIS_FOLDER = os.path.join(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), 'data'), 'wrong_sign_classification')
+        THIS_FOLDER = os.path.join(os.path.join(os.path.join(os.path.dirname(
+                      os.path.dirname(os.path.dirname(os.path.dirname(
+                      os.path.abspath(__file__))))), 'data'),
+                      'wrong_sign_classification'), 'pixelmap_hdf5')
         with open(hdf5_file_list, 'r') as f:
             fns = f.read().splitlines()
             for fn in fns:
