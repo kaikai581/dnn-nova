@@ -1,1 +1,4 @@
+../../../data/wrong_sign_classification/pixelmap_hdf5/training_neardet_genie_nonswap_genierw_fhc_v08_1019_r00012057_s07_c064_R17-11-14-prod4reco.neutron-respin.b_v1_20170322_204739_sim.evt_dump.h5
+../../../data/wrong_sign_classification/pixelmap_hdf5/training_neardet_genie_nonswap_genierw_fhc_v08_1034_r00012060_s12_c005_R17-11-14-prod4reco.neutron-respin.b_v1_20170322_204739_sim.evt_dump.h5
+../../../data/wrong_sign_classification/pixelmap_hdf5/training_neardet_genie_nonswap_genierw_rhc_v08_1239_r00011640_s11_c013_R17-11-14-prod4reco.neutron-respin.b_v1_20170802_144926_sim.evt_dump.h5
 ../../../data/wrong_sign_classification/pixelmap_hdf5/training_neardet_genie_nonswap_genierw_rhc_v08_1239_r00011640_s13_c006_R17-11-14-prod4reco.neutron-respin.b_v1_20170802_144926_sim.evt_dump.h5

@@ -64,7 +64,7 @@ def train_model(modname = 'alexnet', pm_ch = 'both', bs = 16):
     for epoch in range(max_epochs):
         for i, (view1, view2, local_labels) in enumerate(dl):
             view1 = view1.float().to(device)
-            view1 = nn.ZeroPad2d((0,117,64,64))(local_batch)
+            view1 = nn.ZeroPad2d((0,117,64,64))(view1)
             local_labels = local_labels.to(device)
 
             # forward pass
