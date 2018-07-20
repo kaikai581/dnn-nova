@@ -7,6 +7,7 @@ from models.densenet import DenseNet
 from models.inception import inception_v3
 from models.resnet import resnet18
 from models.squeezenet import squeezenet1_1
+from models.vgg import vgg19_bn
 
 import os
 import torch
@@ -21,6 +22,7 @@ def train_model(modname = 'alexnet', pm_ch = 'both', bs = 16):
             'inception'
             'resnet', batch 16
             'squeezenet', batch 16
+            'vgg'
         pm_ch (string): pixelmap channel -- 'time', 'charge', 'both', default to both
     """
     # device configuration
@@ -51,6 +53,8 @@ def train_model(modname = 'alexnet', pm_ch = 'both', bs = 16):
         model = resnet18(num_classes=3, in_ch=nch).to(device)
     elif modname == 'squeezenet':
         model = squeezenet1_1(num_classes=3, in_ch=nch).to(device)
+    elif modname == 'vgg':
+        model = vgg19_bn(in_ch=nch, num_classes=3).to(device)
     else:
         print('Model {} not defined.'.format(modname))
         return
@@ -64,7 +68,10 @@ def train_model(modname = 'alexnet', pm_ch = 'both', bs = 16):
     for epoch in range(max_epochs):
         for i, (view1, view2, local_labels) in enumerate(dl):
             view1 = view1.float().to(device)
-            view1 = nn.ZeroPad2d((0,117,64,64))(view1)
+            if modname == 'inception':
+                view1 = nn.ZeroPad2d((0,192,102,101))(view1)
+            else:
+                view1 = nn.ZeroPad2d((0,117,64,64))(view1)
             local_labels = local_labels.to(device)
 
             # forward pass
